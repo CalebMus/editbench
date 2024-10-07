@@ -1,4 +1,5 @@
 import json
+import os
 
 def load_json(filepath):
     with open(filepath, 'r') as f:
@@ -174,6 +175,8 @@ def process_knowedit_dataset(filepath, transformed_data):
 
 # rake
 def process_rake_dataset(filepath, transformed_data):
+    
+
     rake_data = load_json(filepath)
     for item in rake_data:
         transformed_data.append({
@@ -214,16 +217,20 @@ def process_edits_evaluation_dataset(filepath, transformed_data):
 
 def load_data(dataset):
     transformed_data = []
-
     dataset_paths = {
-        "counterfact": "/Users/calebmusfeldt/Desktop/Editbench Project/counterfact/Counterfact.json",
-        "rippledits": "/Users/calebmusfeldt/Desktop/Editbench Project/RippleEdits/popular.json",
-        "mquake": "/Users/calebmusfeldt/Desktop/Editbench Project/MQuAKE/MQuAKE-T.json",
-        "knowedit": KnowEditDataset('the_json_path'),
-        "rake": "/Users/calebmusfeldt/Desktop/Editbench Project/known_1000.json",
-        "pep3k-20qa": "/path/to/pep3k-20qa.json",  # need to update
-        "taxi": "/Users/calebmusfeldt/Desktop/Editbench Project/TAXI/edits-evaluation.json"
-    }
+            "counterfact": "counterfact\\Counterfact.json",
+            "rippledits": "RippleEdits\\popular.json",
+            "mquake": "MQuAKE\\MQuAKE-T.json",
+            # "knowedit": KnowEditDataset('the_json_path'),
+            "rake": "Editbench Project\\known_1000.json",
+            "pep3k-20qa": "pep3k-20qa.json",  # need to update
+            "taxi": "TAXI\\edits-evaluation.json"
+        }
+
+    current_directory = os.getcwd()
+    for key in dataset_paths:
+        dataset_paths[key] = os.path.join(current_directory, dataset_paths[key])
+       
 
     if dataset == "counterfact":
         process_counterfact_dataset(dataset_paths["counterfact"], transformed_data)
@@ -250,4 +257,10 @@ def load_data(dataset):
         raise ValueError(f"Unknown dataset: {dataset}")
 
     return transformed_data
+
+
+
+
+
+
 
